@@ -1,0 +1,80 @@
+// ./prisma/schema.prisma
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @unique @map("user_id") @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @map("user_id") @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  identifier String   @id @default(auto()) @map("_id") @db.ObjectId
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Syllabus {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  courseId String @map("course_id") @db.ObjectId
+  week     Int
+  topic    String
+  content  String
+  video    String
+  Course   Course @relation(fields: [courseId], references: [id])
+
+  @@map("syllabus")
+}
+
+model Course {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  instructor    String
+  description   String
+  thumbnail     String
+  duration      Int
+  location      String
+  prerequisites String[]
+  syllabus      Syllabus[]
+
+  @@map("courses")
+}
