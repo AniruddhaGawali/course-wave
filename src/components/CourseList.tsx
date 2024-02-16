@@ -14,16 +14,11 @@ import {
 } from "./ui/card";
 import { Button } from "./ui/button";
 import { useCourse } from "@/redux/dispatch";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
-import { fetchCourses } from "@/redux/features/course-slice";
-import { get } from "http";
 
 type Props = {};
 
 function CourseList({}: Props) {
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
   const [search, setSearch] = useState<string>("");
   const [filteredCourses, setFilteredCourses] = useState<any>([]);
   const { courses, getCourses } = useCourse();
@@ -84,8 +79,8 @@ function CourseList({}: Props) {
               key={index}
               className="h-[50vh] rounded-xl border-2 hover:border-black hover:shadow-lg"
             >
-              <CardHeader className="relative h-[60%]">
-                <div className="absolute bottom-0 left-0 z-10 flex h-full w-full flex-col  items-start justify-end bg-gradient-to-tr from-[rgba(0,0,0,0.5)] to-transparent p-5">
+              <CardHeader className="relative h-[60%] p-0">
+                <div className="absolute bottom-0 left-0 z-10 flex h-full w-full flex-col  items-start justify-end rounded-t-xl bg-gradient-to-tr from-[rgba(0,0,0,0.5)] to-transparent p-5">
                   <CardTitle className="text-2xl font-semibold text-white">
                     {course.name}
                   </CardTitle>
@@ -94,7 +89,12 @@ function CourseList({}: Props) {
                   </CardDescription>
                 </div>
                 {/*  eslint-disable-next-line @next/next/no-img-element */}
-                <img src={course.thumbnail} alt={course.name} />
+                <img
+                  src={course.thumbnail}
+                  alt={course.name}
+                  className="mt-0 h-full w-full rounded-t-xl object-cover p-[1px]"
+                  style={{ marginTop: 0 }}
+                />
               </CardHeader>
 
               <CardContent className="container mt-3 text-sm">

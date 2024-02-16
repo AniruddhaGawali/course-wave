@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { Button } from "@/components/ui/button";
 
-import { FcGoogle } from 'react-icons/fc';
-import * as actions from '@/actions';
+import { FcGoogle } from "react-icons/fc";
+import * as actions from "@/actions";
 
 type Props = {};
 
@@ -16,9 +16,11 @@ const LoginPage = (props: Props) => {
 
         <Button
           className="mt-3 flex w-full max-w-sm items-center gap-5 "
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
             actions.loginFromGoogle();
-          }}>
+          }}
+        >
           <FcGoogle className="text-lg" />
           <span>Login with Google</span>
         </Button>
