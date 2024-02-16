@@ -2,9 +2,10 @@
 
 import YoutubeEmbed from "@/components/YoutubeEmbed";
 import { Button } from "@/components/ui/button";
-import { useCourse } from "@/redux/dispatch";
+import { useCourse, useUser } from "@/redux/dispatch";
+import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type Props = {};
 
@@ -13,6 +14,15 @@ function DetailPage({}: Props) {
   const param = useParams();
 
   const course = getCourseById(param.id as string);
+  const { data: session } = useSession();
+  const { enrollCourse, getEnrollments, enrollments } = useUser();
+
+  useEffect(() => {
+    if (enrollments.length == 0) {
+      getEnrollments(session?.user?.id as string);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [selectedModule, setSelectedModule] = useState<Syllabus | null>(null);
   const youtubeEmbeded = selectedModule?.video.split("v=")[1];
@@ -34,8 +44,21 @@ function DetailPage({}: Props) {
               {course.name}
             </h1>
             <h3 className="text-lg md:text-2xl">{course.description}</h3>
-            <Button variant="secondary" className="mt-5 font-semibold">
-              Enroll Now
+            <Button
+              variant="secondary"
+              className="mt-5 font-semibold"
+              onClick={() =>
+                enrollCourse(course.id, session?.user?.id as string)
+              }
+              disabled={
+                enrollments.find((enroll) => enroll.course.id == course.id)
+                  ? true
+                  : false
+              }
+            >
+              {enrollments.find((enroll) => enroll.course.id == course.id)
+                ? "Enrolled"
+                : "Enroll Now"}
             </Button>
           </div>
 

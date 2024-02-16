@@ -36,13 +36,14 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String?   @unique
+  email         String?      @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  enrollment    Enrollment[]
 }
 
 model VerificationToken {
@@ -66,7 +67,7 @@ model Syllabus {
 }
 
 model Course {
-  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
   name          String
   instructor    String
   description   String
@@ -75,6 +76,19 @@ model Course {
   location      String
   prerequisites String[]
   syllabus      Syllabus[]
+  enrollment    Enrollment[]
 
   @@map("courses")
+}
+
+model Enrollment {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  courseId String @map("course_id") @db.ObjectId
+  userId   String @map("user_id") @db.ObjectId
+  progress Int
+  course   Course @relation(fields: [courseId], references: [id])
+  user     User   @relation(fields: [userId], references: [id])
+
+  @@unique([courseId, userId])
+  @@map("enrollments")
 }

@@ -3,6 +3,7 @@
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCourses, fetchCoursesByID } from "../features/course-slice";
+import { addEnrollCourse, fetchEnrollment } from "../features/user-slice";
 
 export const useCourse = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,4 +23,21 @@ export const useCourse = () => {
   };
 
   return { courses, getCourses, getCourseById };
+};
+
+export const useUser = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const enrollments = useSelector(
+    (state: RootState) => state.userReducer.enrollment,
+  );
+
+  const getEnrollments = (id: string) => {
+    dispatch(fetchEnrollment(id)); // Add 'as any' to fix the type error
+  };
+
+  const enrollCourse = (courseId: string, userId: string) => {
+    dispatch(addEnrollCourse({ courseId, userId })); // Add 'as any' to fix the type error
+  };
+
+  return { enrollments, getEnrollments, enrollCourse };
 };

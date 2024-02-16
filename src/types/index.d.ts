@@ -16,3 +16,9 @@ interface Syllabus {
   content: string;
   video: string;
 }
+
+interface Enrollment {
+  id: string;
+  course: Course;
+  progress: number;
+}

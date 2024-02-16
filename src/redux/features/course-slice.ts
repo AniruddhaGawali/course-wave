@@ -17,6 +17,7 @@ export const fetchCourses = createAsyncThunk(
     return data as any as Course[];
   },
 );
+
 export const fetchCoursesByID = createAsyncThunk(
   "courses/fetchCoursesById",
   async (id: string) => {

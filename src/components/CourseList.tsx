@@ -13,7 +13,8 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Button } from "./ui/button";
-import { useCourse } from "@/redux/dispatch";
+import { useCourse, useUser } from "@/redux/dispatch";
+import { useSession } from "next-auth/react";
 
 type Props = {};
 
@@ -22,9 +23,12 @@ function CourseList({}: Props) {
   const [search, setSearch] = useState<string>("");
   const [filteredCourses, setFilteredCourses] = useState<any>([]);
   const { courses, getCourses } = useCourse();
+  const { data: session } = useSession();
+  const { enrollments, getEnrollments, enrollCourse } = useUser();
 
   useEffect(() => {
     getCourses();
+    getEnrollments(session?.user?.id as string);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -102,7 +106,25 @@ function CourseList({}: Props) {
                 <p>Duraction : {course.duration} Hrs</p>
               </CardContent>
               <CardFooter className="space-x-2">
-                <Button>Enroll</Button>
+                <Button
+                  onClick={() => {
+                    enrollCourse(course.id, session?.user?.id as string);
+                  }}
+                  disabled={
+                    enrollments.find(
+                      (enrollment: Enrollment) =>
+                        enrollment.course.id == course.id,
+                    )?.course.id == course.id
+                  }
+                >
+                  {enrollments.find(
+                    (enrollment: Enrollment) =>
+                      enrollment.course.id == course.id,
+                  )
+                    ? "Enrolled"
+                    : "Enroll"}
+                </Button>
+
                 <Button
                   variant="ghost"
                   onClick={() => {
