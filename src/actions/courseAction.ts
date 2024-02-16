@@ -10,6 +10,17 @@ export async function getAllCourses() {
   });
 }
 
+export async function getCourseById(id: string) {
+  return await db.course.findFirst({
+    where: {
+      id: id,
+    },
+    include: {
+      syllabus: true,
+    },
+  });
+}
+
 export async function addSyllabus(
   syllabus: Syllabus | Syllabus[],
   courseId: string,
@@ -44,7 +55,6 @@ export async function addCourse(course: Course | Course[]) {
     course.forEach(async (c) => {
       await addCourse(c);
     });
-    console.log("Courses added");
   } else {
     const data = await db.course.create({
       data: {

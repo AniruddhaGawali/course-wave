@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-
-import { couserData } from "../../public/data/data";
 
 import {
   Card,
@@ -14,22 +13,42 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Button } from "./ui/button";
-import { getAllCourses } from "@/actions";
+import { useCourse } from "@/redux/dispatch";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { fetchCourses } from "@/redux/features/course-slice";
+import { get } from "http";
 
 type Props = {};
 
 function CourseList({}: Props) {
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const [search, setSearch] = useState<string>("");
-  const [courses, setCourses] = useState<any>([]);
-
-  const getCousers = async () => {
-    const res = await getAllCourses();
-    setCourses(res);
-  };
+  const [filteredCourses, setFilteredCourses] = useState<any>([]);
+  const { courses, getCourses } = useCourse();
 
   useEffect(() => {
-    getCousers();
+    getCourses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (courses.length > 0) {
+      setFilteredCourses(courses);
+    }
+  }, [courses]);
+
+  useEffect(() => {
+    if (search) {
+      const filtered = courses.filter((course: Course) =>
+        course.name.toLowerCase().includes(search.toLowerCase()),
+      );
+      setFilteredCourses(filtered);
+    } else {
+      setFilteredCourses(courses);
+    }
+  }, [search, filteredCourses, courses]);
 
   return (
     <div className="h-full w-full">
@@ -59,7 +78,7 @@ function CourseList({}: Props) {
         </div>
       </section>
       <section className="container mt-32 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
-        {courses.map((course: Course, index: number) => {
+        {filteredCourses.map((course: Course, index: number) => {
           return (
             <Card
               key={index}
@@ -74,6 +93,7 @@ function CourseList({}: Props) {
                     {course.description}
                   </CardDescription>
                 </div>
+                {/*  eslint-disable-next-line @next/next/no-img-element */}
                 <img src={course.thumbnail} alt={course.name} />
               </CardHeader>
 
@@ -83,7 +103,14 @@ function CourseList({}: Props) {
               </CardContent>
               <CardFooter className="space-x-2">
                 <Button>Enroll</Button>
-                <Button variant="ghost">Details</Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    router.push(`/course/${course.id}`);
+                  }}
+                >
+                  Details
+                </Button>
               </CardFooter>
             </Card>
           );
