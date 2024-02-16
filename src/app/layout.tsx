@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import NextAuthProvider from "@/provider/nextAuthProvider";
 import ReduxProvider from "@/provider/reduxProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,7 +24,7 @@ export default async function RootLayout({
     <html lang="en">
       <NextAuthProvider session={session}>
         <ReduxProvider>
-          <body className={inter.className}>{children}</body>
+          <body className={montserrat.className}>{children}</body>
         </ReduxProvider>
       </NextAuthProvider>
     </html>
