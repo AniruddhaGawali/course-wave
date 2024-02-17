@@ -1,6 +1,6 @@
 export const couserData: Course[] = [
   {
-    id: 1,
+    id: "1",
     name: "React",
     instructor: "John Doe",
     description: "Learn React from scratch",
@@ -55,7 +55,7 @@ export const couserData: Course[] = [
     ],
   },
   {
-    id: 2,
+    id: "2",
     name: "Node",
     instructor: "Jane Doe",
     description: "Learn Node from scratch",
