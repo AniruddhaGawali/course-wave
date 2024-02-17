@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
 import NextAuthProvider from "@/provider/nextAuthProvider";
 import ReduxProvider from "@/provider/reduxProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -24,7 +25,10 @@ export default async function RootLayout({
     <html lang="en">
       <NextAuthProvider session={session}>
         <ReduxProvider>
-          <body className={montserrat.className}>{children}</body>
+          <body className={montserrat.className}>
+            {children}
+            <Toaster />
+          </body>
         </ReduxProvider>
       </NextAuthProvider>
     </html>

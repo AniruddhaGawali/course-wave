@@ -3,7 +3,11 @@
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCourses, fetchCoursesByID } from "../features/course-slice";
-import { addEnrollCourse, fetchEnrollment } from "../features/user-slice";
+import {
+  addEnrollCourse,
+  fetchEnrollment,
+  progressEnrollCourse,
+} from "../features/user-slice";
 
 export const useCourse = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -39,5 +43,13 @@ export const useUser = () => {
     dispatch(addEnrollCourse({ courseId, userId })); // Add 'as any' to fix the type error
   };
 
-  return { enrollments, getEnrollments, enrollCourse };
+  const progressCourse = (
+    courseId: string,
+    userId: string,
+    progress: number,
+  ) => {
+    dispatch(progressEnrollCourse({ courseId, userId, progress })); // Add 'as any' to fix the type error
+  };
+
+  return { enrollments, getEnrollments, enrollCourse, progressCourse };
 };

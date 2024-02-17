@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
@@ -19,11 +20,13 @@ function Navbar({}: Props) {
 
   return (
     <header className="fixed left-1/2 top-10 z-50 flex h-20 w-[90%] -translate-x-1/2 items-center justify-between rounded-xl bg-[rgba(255,255,255,0.45)]  px-10 backdrop-blur-sm">
-      <h1>Logo</h1>
+      <Link href={"/"}>
+        <h1>Logo</h1>
+      </Link>
 
       <nav>
         <ul className="flex items-center justify-center gap-10">
-          <li className="text-lg font-semibold text-white transition-colors duration-200 ease-in-out">
+          <li className="text-lg font-semibold transition-colors duration-200 ease-in-out">
             <a href="/dashboard" className="hidden hover:underline sm:block ">
               Dashboard
             </a>

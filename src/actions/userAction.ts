@@ -26,3 +26,24 @@ export async function getEnrolledCourses(userId: string) {
     },
   });
 }
+
+export async function progressCourse(
+  courseId: string,
+  userId: string,
+  progress: number,
+) {
+  return await db.enrollment.update({
+    where: {
+      courseId_userId: {
+        courseId: courseId,
+        userId: userId,
+      },
+    },
+    data: {
+      progress: progress,
+    },
+    include: {
+      course: true,
+    },
+  });
+}

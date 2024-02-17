@@ -1,6 +1,5 @@
 "use sever";
 import { signIn, signOut } from "next-auth/react";
-import { redirect } from "next/navigation";
 
 export { addCourse, addSyllabus, getAllCourses } from "./courseAction";
 
@@ -22,6 +21,5 @@ export async function loginFromGoogle() {
 }
 
 export async function logOut() {
-  await signOut({ redirect: false });
-  redirect("/");
+  await signOut({ redirect: true, callbackUrl: "/" });
 }
