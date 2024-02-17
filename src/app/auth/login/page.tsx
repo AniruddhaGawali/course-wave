@@ -10,8 +10,8 @@ type Props = {};
 
 const LoginPage = (props: Props) => {
   return (
-    <div className="flex h-[80vh] w-full items-center justify-center">
-      <form className="flex h-2/3 w-1/3 flex-col items-center justify-center gap-6 rounded-md bg-gray-50">
+    <div className="grainy-gradient flex h-screen w-full items-center justify-center">
+      <form className="flex h-2/4 w-1/3 flex-col items-center justify-center gap-6 rounded-lg bg-[rgba(255,255,255,0.45)]  px-10 backdrop-blur-sm">
         <h2 className="text-center text-xl font-semibold">Login With Google</h2>
 
         <Button

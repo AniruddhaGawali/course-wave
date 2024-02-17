@@ -10,7 +10,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CircleUser, LayoutDashboard, LogOut } from "lucide-react";
+import {
+  Brain,
+  BrainCircuit,
+  CircleUser,
+  LayoutDashboard,
+  LogOut,
+} from "lucide-react";
 import * as action from "@/actions";
 
 type Props = {};
@@ -21,7 +27,9 @@ function Navbar({}: Props) {
   return (
     <header className="fixed left-1/2 top-10 z-50 flex h-20 w-[90%] -translate-x-1/2 items-center justify-between rounded-xl bg-[rgba(255,255,255,0.45)]  px-10 backdrop-blur-sm">
       <Link href={"/"}>
-        <h1>Logo</h1>
+        <h1>
+          <Brain size={32} className="mr-2 inline-block hover:text-blue-400" />
+        </h1>
       </Link>
 
       <nav>
