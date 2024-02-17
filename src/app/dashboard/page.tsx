@@ -50,6 +50,14 @@ function Dashboard({}: Props) {
     );
   }
 
+  const enrollmentsLength = enrollments.length;
+  const completedCourses = enrollments.filter(
+    (enroll) => enroll.progress === enroll.course.duration,
+  ).length;
+  const inProgressCourses = enrollments.filter(
+    (enroll) => enroll.progress < enroll.course.duration,
+  ).length;
+
   return (
     <>
       <section className="grainy-gradient h-[50vh] w-full">
@@ -67,9 +75,9 @@ function Dashboard({}: Props) {
             </p>
           </div>
           <div className="flex w-full items-center justify-center gap-5 text-sm sm:text-lg md:justify-end">
-            <span>Enrolled : {enrollments.length}</span>
-            <span>Completed : {enrollments.length}</span>
-            <span>Progress : {enrollments.length}</span>
+            <span>Enrolled : {enrollmentsLength}</span>
+            <span>Completed : {completedCourses}</span>
+            <span>Progress : {inProgressCourses}</span>
           </div>
         </div>
       </section>
