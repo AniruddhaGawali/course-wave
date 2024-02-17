@@ -10,18 +10,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Brain,
-  BrainCircuit,
-  CircleUser,
-  LayoutDashboard,
-  LogOut,
-} from "lucide-react";
+import { Brain, CircleUser, LayoutDashboard, LogOut } from "lucide-react";
 import * as action from "@/actions";
+
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 function Navbar({}: Props) {
+  const router = useRouter();
   const { data: session } = useSession();
 
   return (
@@ -33,12 +30,17 @@ function Navbar({}: Props) {
       </Link>
 
       <nav>
-        <ul className="flex items-center justify-center gap-10">
+        <ul className="flex w-full items-center justify-center gap-10">
           <li className="text-lg font-semibold transition-colors duration-200 ease-in-out">
             <a href="/dashboard" className="hidden hover:underline sm:block ">
               Dashboard
             </a>
-            <LayoutDashboard className="block hover:underline sm:hidden " />
+            <LayoutDashboard
+              className="block hover:underline sm:hidden"
+              onClick={() => {
+                router.push("/dashboard");
+              }}
+            />
           </li>
           <li>
             {!session ? (

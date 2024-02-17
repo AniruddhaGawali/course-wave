@@ -41,7 +41,7 @@ function Dashboard({}: Props) {
 
   if (status === "unauthenticated") {
     return (
-      <div className="grainy-gradient flex h-screen w-full items-center justify-center gap-5">
+      <div className="grainy-gradient flex h-screen w-full items-center justify-center gap-5 p-10">
         <h1 className="text-2xl font-semibold capitalize">
           You are not authenticated, Please{" "}
         </h1>
