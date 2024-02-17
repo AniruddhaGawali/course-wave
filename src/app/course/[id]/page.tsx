@@ -96,6 +96,12 @@ function DetailPage({}: Props) {
             </h4>
             <p className="md:text-xl">{course.duration} Hrs</p>
             <p className="md:text-xl">{course.syllabus.length} Modules</p>
+            <p className="flex gap-2 md:text-xl">
+              Prerequisites :{" "}
+              {course.prerequisites.map((e, key) => (
+                <span key={key}>{e}</span>
+              ))}
+            </p>
           </div>
         </div>
       </section>

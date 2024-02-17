@@ -11,7 +11,6 @@ export async function getAllCourses() {
 }
 
 export async function getCourseById(id: string) {
-  if (!id) return;
   return await db.course.findFirst({
     where: {
       id: id,
@@ -26,8 +25,6 @@ export async function addSyllabus(
   syllabus: Syllabus | Syllabus[],
   courseId: string,
 ) {
-  if (!syllabus) return;
-
   if (Array.isArray(syllabus)) {
     await db.syllabus.createMany({
       data: [
@@ -54,8 +51,6 @@ export async function addSyllabus(
 }
 
 export async function addCourse(course: Course | Course[]) {
-  if (!course) return;
-
   if (Array.isArray(course)) {
     course.forEach(async (c) => {
       await addCourse(c);

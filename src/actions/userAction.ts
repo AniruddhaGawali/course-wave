@@ -3,7 +3,6 @@
 import db from "@/db";
 
 export async function enrollCourse(courseId: string, userId: string) {
-  if (!courseId || !userId) return;
   const data = await db.enrollment.create({
     data: {
       courseId: courseId,
@@ -18,7 +17,6 @@ export async function enrollCourse(courseId: string, userId: string) {
 }
 
 export async function getEnrolledCourses(userId: string) {
-  if (!userId) return;
   return await db.enrollment.findMany({
     where: {
       userId: userId,
@@ -34,7 +32,6 @@ export async function progressCourse(
   userId: string,
   progress: number,
 ) {
-  if (!courseId || !userId || !progress) return;
   return await db.enrollment.update({
     where: {
       courseId_userId: {
