@@ -3,6 +3,7 @@
 import db from "@/db";
 
 export async function enrollCourse(courseId: string, userId: string) {
+  if (!courseId || !userId) throw new Error("Invalid input");
   const data = await db.enrollment.create({
     data: {
       courseId: courseId,
@@ -17,6 +18,7 @@ export async function enrollCourse(courseId: string, userId: string) {
 }
 
 export async function getEnrolledCourses(userId: string) {
+  if (!userId) throw new Error("Invalid input");
   return await db.enrollment.findMany({
     where: {
       userId: userId,
@@ -32,6 +34,7 @@ export async function progressCourse(
   userId: string,
   progress: number,
 ) {
+  if (!courseId || !userId || !progress) throw new Error("Invalid input");
   return await db.enrollment.update({
     where: {
       courseId_userId: {

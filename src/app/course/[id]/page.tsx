@@ -1,23 +1,30 @@
 "use client";
 
+import Spinner from "@/components/Spinner";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
 import { Button } from "@/components/ui/button";
 import { useCourse, useUser } from "@/redux/dispatch";
 import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 type Props = {};
 
 function DetailPage({}: Props) {
-  const { getCourseById } = useCourse();
+  const router = useRouter();
+  const { getCourseById, courseStatus } = useCourse();
   const param = useParams();
 
   const course = getCourseById(param.id as string);
   const { data: session } = useSession();
-  const { enrollCourse, getEnrollments, enrollments, progressCourse } =
-    useUser();
+  const {
+    enrollCourse,
+    getEnrollments,
+    enrollments,
+    progressCourse,
+    enrollmentStatus,
+  } = useUser();
 
   useEffect(() => {
     if (enrollments.length == 0) {
@@ -35,7 +42,12 @@ function DetailPage({}: Props) {
     if (course) setSelectedModule(course.syllabus[0]);
   }, [course]);
 
-  if (!course) return <div>Loading...</div>;
+  if (!course || enrollmentStatus === "loading" || courseStatus === "loading")
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Spinner />
+      </div>
+    );
 
   return (
     <div>
@@ -56,18 +68,25 @@ function DetailPage({}: Props) {
             <Button
               variant="secondary"
               className="mt-5 font-semibold"
-              onClick={() =>
-                enrollCourse(course.id, session?.user?.id as string)
-              }
+              onClick={() => {
+                if (session) {
+                  enrollCourse(course.id, session?.user?.id as string);
+                  toast.success("Enrolled Successfully");
+                } else {
+                  router.push("/auth/login");
+                }
+              }}
               disabled={
                 enrollments.find((enroll) => enroll.course.id == course.id)
                   ? true
                   : false
               }
             >
-              {enrollments.find((enroll) => enroll.course.id == course.id)
-                ? "Enrolled"
-                : "Enroll Now"}
+              {session
+                ? enrollments.find((enroll) => enroll.course.id == course.id)
+                  ? "Enrolled"
+                  : "Enroll Now"
+                : "Login to Enroll"}
             </Button>
           </div>
 

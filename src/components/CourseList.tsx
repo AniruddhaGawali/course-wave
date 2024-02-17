@@ -15,6 +15,7 @@ import {
 import { Button } from "./ui/button";
 import { useCourse, useUser } from "@/redux/dispatch";
 import { useSession } from "next-auth/react";
+import Spinner from "./Spinner";
 
 type Props = {};
 
@@ -22,7 +23,7 @@ function CourseList({}: Props) {
   const router = useRouter();
   const [search, setSearch] = useState<string>("");
   const [filteredCourses, setFilteredCourses] = useState<any>([]);
-  const { courses, getCourses } = useCourse();
+  const { courses, getCourses, courseStatus } = useCourse();
   const { data: session } = useSession();
   const { enrollments, getEnrollments, enrollCourse } = useUser();
 
@@ -51,15 +52,16 @@ function CourseList({}: Props) {
 
   return (
     <div className="h-full w-full">
-      <section className="relative flex h-[40vh] w-full items-end justify-center p-10 sm:h-[50vh]">
+      <section className="grainy-gradient relative flex h-[40vh] w-full items-end justify-center p-10 sm:h-[50vh]">
         <div className="flex w-full flex-col items-center justify-center  gap-2">
-          <h1 className="mb-3 mt-10 text-center text-3xl font-semibold text-white sm:text-5xl lg:text-7xl">
+          <h1 className="mb-3 mt-10 text-center text-3xl font-semibold sm:text-5xl lg:text-7xl">
             Courses List
           </h1>
           <input
             type="text"
-            className="h-10 w-2/3 rounded-lg bg-[rgba(255,255,255,0.45)] px-10 text-base font-medium text-white outline-none backdrop-blur-sm placeholder:font-medium placeholder:text-white sm:font-semibold md:h-16
-            md:w-1/2 md:text-xl md:placeholder:font-semibold
+            className="h-10 w-2/3 rounded-lg bg-[rgba(255,255,255,0.45)] px-10 text-base font-medium placeholder-gray-500 outline-none backdrop-blur-sm  placeholder:font-medium sm:font-semibold
+            md:h-16 md:w-1/2 md:text-xl
+            md:placeholder:font-semibold
             "
             placeholder="Search for a course"
             value={search}
@@ -67,7 +69,7 @@ function CourseList({}: Props) {
           />
         </div>
 
-        <div className="absolute left-0 top-0 -z-20  h-[40vh] w-full  sm:h-[50vh]">
+        <div className="absolute left-0 top-0 -z-20  h-[40vh] w-full  sm:h-[50vh] ">
           <Image
             alt="Mountains"
             src="/images/bg.jpg"
@@ -76,68 +78,79 @@ function CourseList({}: Props) {
           />
         </div>
       </section>
-      <section className="container mt-32 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredCourses.map((course: Course, index: number) => {
-          return (
-            <Card
-              key={index}
-              className="h-[50vh] rounded-xl border-2 hover:border-black hover:shadow-lg"
-            >
-              <CardHeader className="relative h-[60%] p-0">
-                <div className="absolute bottom-0 left-0 z-10 flex h-full w-full flex-col  items-start justify-end rounded-t-xl bg-gradient-to-tr from-[rgba(0,0,0,0.5)] to-transparent p-5">
-                  <CardTitle className="text-2xl font-semibold text-white">
-                    {course.name}
-                  </CardTitle>
-                  <CardDescription className="text-base text-white">
-                    {course.description}
-                  </CardDescription>
-                </div>
-                {/*  eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={course.thumbnail}
-                  alt={course.name}
-                  className="mt-0 h-full w-full rounded-t-xl object-cover p-[1px]"
-                  style={{ marginTop: 0 }}
-                />
-              </CardHeader>
 
-              <CardContent className="container mt-3 text-sm">
-                <p>Instructor : {course.instructor}</p>
-                <p>Duraction : {course.duration} Hrs</p>
-              </CardContent>
-              <CardFooter className="space-x-2">
-                <Button
-                  onClick={() => {
-                    enrollCourse(course.id, session?.user?.id as string);
-                  }}
-                  disabled={
-                    enrollments.find(
-                      (enrollment: Enrollment) =>
-                        enrollment.course.id == course.id,
-                    )?.course.id == course.id
-                  }
-                >
-                  {enrollments.find(
-                    (enrollment: Enrollment) =>
-                      enrollment.course.id == course.id,
-                  )
-                    ? "Enrolled"
-                    : "Enroll"}
-                </Button>
+      {courseStatus === "loading" ? (
+        <div className="flex h-[50vh] w-full items-center justify-center">
+          <Spinner />
+        </div>
+      ) : (
+        <section className="container mt-32 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredCourses.map((course: Course, index: number) => {
+            return (
+              <Card
+                key={index}
+                className="h-[50vh] rounded-xl border-2 hover:border-black hover:shadow-lg"
+              >
+                <CardHeader className="relative h-[60%] p-0">
+                  <div className="absolute bottom-0 left-0 z-10 flex h-full w-full flex-col  items-start justify-end rounded-t-xl bg-gradient-to-tr from-[rgba(0,0,0,0.5)] to-transparent p-5">
+                    <CardTitle className="text-2xl font-semibold text-white">
+                      {course.name}
+                    </CardTitle>
+                    <CardDescription className="text-base text-white">
+                      {course.description}
+                    </CardDescription>
+                  </div>
+                  {/*  eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={course.thumbnail}
+                    alt={course.name}
+                    className="mt-0 h-full w-full rounded-t-xl object-cover p-[1px]"
+                    style={{ marginTop: 0 }}
+                  />
+                </CardHeader>
 
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    router.push(`/course/${course.id}`);
-                  }}
-                >
-                  Details
-                </Button>
-              </CardFooter>
-            </Card>
-          );
-        })}
-      </section>
+                <CardContent className="container mt-3 text-sm">
+                  <p>Instructor : {course.instructor}</p>
+                  <p>Duraction : {course.duration} Hrs</p>
+                </CardContent>
+                <CardFooter className="space-x-2">
+                  <Button
+                    onClick={() => {
+                      if (session)
+                        enrollCourse(course.id, session?.user?.id as string);
+                      else router.push("/auth/login");
+                    }}
+                    disabled={
+                      enrollments.find(
+                        (enrollment: Enrollment) =>
+                          enrollment.course.id == course.id,
+                      )?.course.id == course.id
+                    }
+                  >
+                    {session
+                      ? enrollments.find(
+                          (enrollment: Enrollment) =>
+                            enrollment.course.id == course.id,
+                        )
+                        ? "Enrolled"
+                        : "Enroll"
+                      : "Login to Enroll"}
+                  </Button>
+
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      router.push(`/course/${course.id}`);
+                    }}
+                  >
+                    Details
+                  </Button>
+                </CardFooter>
+              </Card>
+            );
+          })}
+        </section>
+      )}
     </div>
   );
 }

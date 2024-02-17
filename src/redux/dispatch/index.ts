@@ -14,6 +14,9 @@ export const useCourse = () => {
   const courses = useSelector(
     (state: RootState) => state.courseReducer.courses,
   );
+  const courseStatus = useSelector(
+    (state: RootState) => state.courseReducer.status,
+  );
 
   const getCourses = () => {
     dispatch(fetchCourses()); // Add 'as any' to fix the type error
@@ -26,13 +29,17 @@ export const useCourse = () => {
     return courses.find((course) => course.id == id);
   };
 
-  return { courses, getCourses, getCourseById };
+  return { courses, getCourses, getCourseById, courseStatus };
 };
 
 export const useUser = () => {
   const dispatch = useDispatch<AppDispatch>();
   const enrollments = useSelector(
     (state: RootState) => state.userReducer.enrollment,
+  );
+
+  const enrollmentStatus = useSelector(
+    (state: RootState) => state.userReducer.status,
   );
 
   const getEnrollments = (id: string) => {
@@ -51,5 +58,11 @@ export const useUser = () => {
     dispatch(progressEnrollCourse({ courseId, userId, progress })); // Add 'as any' to fix the type error
   };
 
-  return { enrollments, getEnrollments, enrollCourse, progressCourse };
+  return {
+    enrollments,
+    getEnrollments,
+    enrollCourse,
+    progressCourse,
+    enrollmentStatus,
+  };
 };
