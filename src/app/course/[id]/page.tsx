@@ -90,7 +90,7 @@ function DetailPage({}: Props) {
             </Button>
           </div>
 
-          <div className="flex w-full max-w-[90%] flex-row items-center justify-between pt-5 md:flex-col md:items-end md:justify-end md:p-5">
+          <div className="flex w-full max-w-[90%] flex-col items-start justify-between pt-5 sm:flex-row sm:items-center md:flex-col md:items-end md:justify-end md:p-5">
             <h4 className="text-lg font-semibold md:text-2xl">
               By {course.instructor}
             </h4>
