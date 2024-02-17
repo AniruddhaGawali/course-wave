@@ -17,6 +17,7 @@ export async function enrollCourse(courseId: string, userId: string) {
 }
 
 export async function getEnrolledCourses(userId: string) {
+  if (!userId) return [];
   return await db.enrollment.findMany({
     where: {
       userId: userId,
